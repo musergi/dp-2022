@@ -1,4 +1,4 @@
-# Exercise 2.1
+# Exercise 2.1 holiii que tal?
 library(sdcMicro)
 data("free1")
 df <- as.data.frame(free1)
@@ -69,6 +69,8 @@ sdcObj <- globalRecode(sdcObj,
     column = "AGE",
     breaks=c(0, 14, 25, 64, 74),
     labels = c("CHILDREN", "YOUNG", "ADULTS", "SENIOR"))
+
+# Section d
 print(sdcObj)
 
 # Exercise 3.2
