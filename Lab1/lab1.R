@@ -18,12 +18,15 @@ print(combination_count)
 subdf <- df[,c("REGION", "SEX")]
 contingency <- table(subdf)
 is_not_k2 <- contingency == 1
-print(sum(contingency[is_not_k2]))
+k2_violations <- sum(contingency[is_not_k2])
 is_not_k3 <- (contingency > 0) & (contingency < 3)
-print(sum(contingency[is_not_k3]))
+k3_violations <- sum(contingency[is_not_k3])
+print(k2_violations)
+print(k3_violations)
 
 # Section d
-print(freqCalc(df, keyVars = c("REGION", "SEX")))
+freq <- freqCalc(df, keyVars = c("REGION", "SEX"))
+print(freq)
 
 # Exercise 2.2
 
