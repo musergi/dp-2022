@@ -75,4 +75,41 @@ print(sdcObj)
 
 # Section a
 sdcObj <- createSdcObj(df, keyVars = selected_attr)
-sdcApp()
+
+# Exercise 3.3
+
+# Section a
+tab <- table(df[,"MARSTAT"])
+print(tab)
+norm_prob <- matrix(tab)[,1] / sum(matrix(tab)[,1])
+shift <- function(v) {
+  n <- length(v)
+  y <- rep(0, n)
+  for(i in 1:n) {
+    y[(i) %% n + 1] = v[i]
+  }
+  return(y)
+}
+rem <- diag(0.1 * min(norm_prob) /norm_prob)
+m <- diag(4) - rem + t(apply(rem, 1, shift))
+postProb <- m %*% matrix(tab)
+
+# Section d
+inputdata <- varToFactor(obj=df, var=c("SEX","REGION","AGE","MARSTAT"))
+## Set up sdcMicro object
+sdcObj <- createSdcObj(dat=inputdata,
+                       keyVars=c("REGION","SEX","AGE"),
+                       numVars=NULL,
+                       weightVar=NULL,
+                       hhId=NULL,
+                       strataVar=NULL,
+                       pramVars=c("MARSTAT"),
+                       excludeVars=NULL,
+                       seed=0,
+                       randomizeRecords=FALSE,
+                       alpha=c(1))
+sdcObj <- pram(sdcObj, variables=c("MARSTAT"), pd=0.8, alpha=0.5)
+P <- sdcObj@pram$params$MARSTAT$Rs
+e <- eigen(t(P))
+idx <- abs(e$values - 1.0) < 1e-12
+res <- e$vectors[,idx] / sum(e$vectors[,idx])
