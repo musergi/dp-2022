@@ -24,6 +24,15 @@ k3_violations <- sum(contingency[is_not_k3])
 print(k2_violations)
 print(k3_violations)
 
+subdf <- df[,selected_attr]
+contingency <- table(subdf)
+is_not_k2 <- contingency == 1
+k2_violations <- sum(contingency[is_not_k2])
+is_not_k3 <- (contingency > 0) & (contingency < 3)
+k3_violations <- sum(contingency[is_not_k3])
+print(k2_violations)
+print(k3_violations)
+
 # Section d
 freq <- freqCalc(df, keyVars = c("REGION", "SEX"))
 print(freq)
