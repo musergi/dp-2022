@@ -37,6 +37,10 @@ print(k3_violations)
 freq <- freqCalc(df, keyVars = c("REGION", "SEX"))
 print(freq)
 
+
+freq <- freqCalc(df, keyVars = selected_attr)
+print(freq)
+
 # Exercise 2.2
 
 # Section a
