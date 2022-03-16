@@ -1,4 +1,4 @@
-# Exercise 2.1 holiii que tal?
+# Exercise 2.1
 library(sdcMicro)
 data("free1")
 df <- as.data.frame(free1)
