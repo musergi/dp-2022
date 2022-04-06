@@ -2,12 +2,13 @@ import argparse
 from re import A
 import pandas
 import random
+import json
 
 def get_max_dist(df, record):
     dist = (df - record)
     sq_dist = dist * dist
     sq_dist['distance'] = sq_dist.sum(axis=1)
-    return sq_dist.distance.idxmax()
+    return int(sq_dist.distance.idxmax())
 
 def get_closest(df, record_idx, n):
     record = df.loc[record_idx]
@@ -27,14 +28,14 @@ df = pandas.read_csv(args.file, index_col=0)
 
 df = (df - df.mean()) / df.std()
 
-df = df[df.index < 30]
-df = df.drop(df.columns[2:], axis=1)
+if args.display:
+    df = df.drop(df.columns[2:], axis=1)
 
 dfc = df.copy()
 
 clusters = []
 
-while True:
+while len(df) >= 3 * args.k:
     farthest = get_max_dist(df, df.mean())
     other = get_max_dist(df, df.loc[farthest])
     farthest_group = get_closest(df, farthest, args.k - 1) + [farthest]
@@ -42,17 +43,19 @@ while True:
     clusters.append(farthest_group)
     clusters.append(other_group)
     df = df.drop(farthest_group + other_group)
-    if len(df) < 3 * args.k:
-        break
 
 if len(df) >= 2 * args.k:
     farthest = get_max_dist(df, df.mean())
-    farthest_group = get_closest(new_df, farthest, args.k - 1) + [farthest]
+    farthest_group = get_closest(df, farthest, args.k - 1) + [farthest]
     clusters.append(farthest_group)
-    df = new_df.drop(farthest_group)
+    df = df.drop(farthest_group)
     clusters.append(list(df.index))
 else:
     clusters.append(list(df.index))
+
+print(f'Cluster count: {len(clusters)}')
+print(f'Cluster: \n{json.dumps(clusters,indent=2)}')
+print(f'Records in cluster: {list(map(len, clusters))}')
 
 if args.display:
     import matplotlib.pyplot as plt
