@@ -30,8 +30,7 @@ df = (df - df.mean()) / df.std()
 
 if args.display:
     df = df.drop(df.columns[2:], axis=1)
-
-dfc = df.copy()
+    dfc = df.copy()
 
 clusters = []
 
@@ -64,5 +63,9 @@ if args.display:
         color = random.randint(0, 2 ** (8 * 3))
         c_str = f'#{color:06X}'
         dfc.loc[cluster, 'c'] = c_str
-    dfc.plot.scatter(df.columns[0], df.columns[1], c='c')
+    dfc.plot.scatter(dfc.columns[0], dfc.columns[1], c='c')
+    s = min(df[dfc.columns[0]].min(), df[dfc.columns[1]].min()) - 0.1
+    e = max(df[dfc.columns[0]].max(), df[dfc.columns[1]].max()) + 0.1
+    plt.xlim(s, e)
+    plt.ylim(s, e)
     plt.show()
