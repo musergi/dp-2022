@@ -8,15 +8,16 @@ print(f'{max(data)=}')
 
 min_age = 0
 max_age = 126
+iterations = 100
+
 data = np.array(data)
 gs1 = max(map(abs, [max_age - min(data), max(data) - min_age]))
 print(f'{gs1=}')
-epsilons = np.logspace(0.01, 3, 30)
+epsilons = np.logspace(0.01, 3, 100)
 mses = []
-"""
 for epsilon in epsilons:
     it_results = []
-    for iteration in range(25):
+    for iteration in range(iterations):
         noise = np.random.laplace(0, gs1 / epsilon, len(data))
         perturbed = data + noise
         m = np.mean(perturbed)
@@ -27,16 +28,17 @@ for epsilon in epsilons:
     mses.append(mse)
 plt.plot(epsilons, mses)
 plt.xscale('log')
+plt.xlabel('Epsilon')
+plt.ylabel('Square error')
 plt.show()
-"""
 
 gs2 = 1
+mses = []
 print(f'{gs2=}')
-"""
 bins = list(map(lambda age: sum(data == age), range(min_age, max_age + 1)))
 for epsilon in epsilons:
     it_results = []
-    for iteration in range(25):
+    for iteration in range(iterations):
         noise = np.random.laplace(0, gs2 / epsilon, len(bins))
         perturbed = bins + noise
         m = sum(map(lambda p: p[0] * p[1], enumerate(perturbed))) / sum(perturbed)
@@ -47,15 +49,17 @@ for epsilon in epsilons:
     mses.append(mse)
 plt.plot(epsilons, mses)
 plt.xscale('log')
+plt.xlabel('Epsilon')
+plt.ylabel('Square error')
 plt.show()
-"""
 
 gs3 = gs1
+mses = []
 print(f'{gs3=}')
 for epsilon in epsilons:
     it_results = []
     true_mean = np.mean(data)
-    for iteration in range(25):
+    for iteration in range(iterations):
         noise = np.random.laplace(0, gs2 / epsilon, 1)
         perturbed = true_mean + noise
         it_results.append(perturbed)
@@ -64,4 +68,6 @@ for epsilon in epsilons:
     mses.append(mse)
 plt.plot(epsilons, mses)
 plt.xscale('log')
+plt.xlabel('Epsilon')
+plt.ylabel('Square error')
 plt.show()
