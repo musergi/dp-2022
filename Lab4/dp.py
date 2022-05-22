@@ -60,7 +60,7 @@ for epsilon in epsilons:
     it_results = []
     true_mean = np.mean(data)
     for iteration in range(iterations):
-        noise = np.random.laplace(0, gs2 / epsilon, 1)
+        noise = np.random.laplace(0, gs3 / epsilon, 1)
         perturbed = true_mean + noise
         it_results.append(perturbed)
     diff = np.array(it_results) - true_mean
